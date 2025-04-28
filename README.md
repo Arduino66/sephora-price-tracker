@@ -1,72 +1,106 @@
-# Sephora Price Tracker
+#  **Sephora Price Tracker** 📈💅
 
-## Project Overview
+## 💡 **Project Overview**
 
-The goal of this project is to track the price history of Sephora products and set up automatic alerts when the prices drop to an all-time low. The project uses **Airflow** for orchestrating workflows and **Playwright** for web scraping Sephora product details, including their names, prices, and other related data. This data is stored and processed for future price analysis.
+This project aims to **track the price history** of products on the **Sephora website** and provide **automatic alerts** when the price of desired products reaches an all-time low.
 
-### Features:
-- Scraping Sephora product data (including name, price, and other details).
-- Storing product data in a database.
-- Creating an Airflow DAG for automation of the scraping and data processing workflows.
-- Alerting system when a product reaches an all-time low price.
+Using **Python**, **Playwright**, **Airflow**, and **Docker**, the system collects product details such as **name, brand, price, ingredients,** and more, and stores them in a **database**. The **Airflow DAG** automates the data scraping process, enabling periodic data collection. Alerts can be set up to notify the user when specific products drop to their desired price.
 
----
+## ⚙️ **Technologies Used**
 
-## Project Setup
+- 🐍 **Python**
+- 🌐 **Playwright** (Web scraping)
+- 🐳 **Docker**
+- 📊 **Airflow** (Task automation)
+- 📁 **PostgreSQL** (Database)
+- 📬 **Email Alerts** 
+
+## 🚀 **Project Goals**
+
+- Track the price history of Sephora products over time.
+- Set up alerts when a product reaches an all-time low price.
+- Automate the scraping process using **Airflow**.
+- Store product data in a **PostgreSQL** database.
+
+## 💑 **How to Set Up and Run**
 
 ### Prerequisites
 
-Before running the project, ensure that you have the following installed:
+Make sure you have the following installed:
 
-- **Docker**: To containerize and run the application.
-- **Python**: For running the Playwright scripts and managing dependencies.
-- **Git**: To clone the project and push it to a repository.
+- 🖥️ **Git**: [Download Git](https://git-scm.com/)
+- 🐳 **Docker**: [Download Docker](https://www.docker.com/get-started)
+- 📆 **Python 3.7+**: [Download Python](https://www.python.org/downloads/)
+- 📧 **PostgreSQL**: Will be automatically set up with Docker
 
-### Installing Dependencies
+### 1. Clone the Repository
 
-1. Clone the repository to your local machine:
+```bash
+git clone https://github.com/yourusername/sephora-price-tracker.git
+cd sephora-price-tracker
+```
 
-    ```bash
-    git clone https://github.com/<your-github-username>/sephora-price-tracker.git
-    ```
+### 2. Set Up Docker Environment
 
-2. Navigate to the project folder:
+Run the following command to build and start the Docker containers:
 
-    ```bash
-    cd sephora-price-tracker
-    ```
+```bash
+docker-compose up --build -d
+```
 
-3. Install the required Python dependencies using **pip**:
+This will start the **Airflow**, **PostgreSQL**, and other necessary services.
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+### 3. Install Python Dependencies
 
-4. Build and run the Docker containers (for Airflow):
+```bash
+pip install -r requirements.txt
+```
 
-    ```bash
-    docker-compose up -d
-    ```
+This will install all necessary Python packages for the project.
+
+### 4. Set Up Airflow
+
+Create a user to access the **Airflow UI**:
+
+```bash
+docker-compose run --rm webserver airflow users create \
+  --username <your-username> \
+  --firstname <your-firstname> \
+  --lastname <your-lastname> \
+  --email <your-email@example.com> \
+  --role Admin \
+  --password <your-password>
+```
+
+Once the user is created, open the **Airflow UI** at `http://localhost:8080` and log in.
+
+### 5. Trigger the Scraping DAG
+
+From the **Airflow UI**, you can trigger the scraping DAG that will automatically start scraping data from Sephora.
+
+## 📝 **Project Roadmap**
+
+- Add a UI to visualize price trends.
+- Implement more granular price tracking (e.g., daily price tracking).
+- Integrate with **Slack** or other messaging platforms for alerts.
+
+## 📂 **File Structure**
+
+```bash
+sephora-price-tracker/
+├── dags/
+│   ├── sephora_scraper.py       # Scraper script
+│   └── airflow_dag.py           # Airflow DAG configuration
+├── requirements.txt             # Python dependencies
+├── docker-compose.yml           # Docker Compose configuration
+├── Dockerfile                   # Docker image configuration
+└── README.md                    # Project documentation
+```
+
+### 🎉 **Thank You for Checking Out the Project!**
+
+Happy price tracking! 💸
 
 ---
-
-## How to Set Up and Run
-
-1. **Docker**: The project uses Docker to set up a local Airflow environment. Once the containers are running, Airflow will be available at `http://localhost:8080`. 
-
-2. **Running the Airflow DAG**: The main workflow is defined in the DAG, which automates scraping and tracking the prices of the products. Airflow will handle this task based on the schedule defined in the DAG configuration.
-
-3. **Adding Alerts**: Once the price data is collected, you can set up alerts to notify you when products hit the target price.
-
----
-
-## Files and Directories
-
-- **airflow_project**: Contains all the configuration files for Airflow.
-- **dags/**: Contains the main Airflow DAG for scraping and automation.
-- **requirements.txt**: Lists the required Python packages for the project.
-- **README.md**: Project documentation (this file).
-- **.gitignore**: Specifies which files to ignore in the version control (e.g., Docker, virtual environments).
-
----
+**Disclaimer:** This project is for personal use and is not affiliated with Sephora in any way.
 
