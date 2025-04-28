@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Airflow logs
+logs/
+
+# Environment variables
+.env
+
+# Local database
+*.db
+
+# Python virtual environments
+.venv/
+env/
+venv/
+
+# MacOS files
+.DS_Store
+
+# PyCharm/VSCode settings
+.idea/
+.vscode/
+
+# Docker
+*.pid

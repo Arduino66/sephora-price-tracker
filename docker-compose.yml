@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - airflow-net
+
+  webserver:
+    image: apache/airflow:2.5.0
+    environment:
+      - LOAD_EX=n
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__FERNET_KEY=Bpcwp2eV2CgQmCEFsTEKP_1mq-0oXzGZsGI23dujjGA=
+      - AIRFLOW__WEBSERVER__RBAC=True
+      - AIRFLOW__API__AUTH_BACKENDS=airflow.api.auth.backend.basic_auth
+    ports:
+      - "8080:8080"
+    command: webserver
+    depends_on:
+      - postgres
+    networks:
+      - airflow-net
+    volumes:
+      - ./dags:/opt/airflow/dags     # <-- Local dags folder
+      - ./logs:/opt/airflow/logs     # <-- Local logs folder (optional but good)
+      - ./plugins:/opt/airflow/plugins  # <-- (optional) plugins if you need later
+
+  scheduler:
+    image: apache/airflow:2.5.0
+    environment:
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+    depends_on:
+      - postgres
+      - webserver
+    command: scheduler
+    networks:
+      - airflow-net
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+
+volumes:
+  postgres_data: {}
+
+networks:
+  airflow-net:
+    driver: bridge
